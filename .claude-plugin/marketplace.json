@@ -1,0 +1,6 @@
+{
+  "name": "darwin-skill",
+  "description": "Curated mirror of alchaincyf/darwin-skill",
+  "owner": {"name": "angzhiLiang", "url": "https://github.com/angzhiLiang"},
+  "plugins": [{"name": "darwin-skill", "description": "Darwin autonomous skill optimizer", "source": "./"}]
+}

@@ -1,0 +1,26 @@
+name: sync-upstream
+on:
+  schedule:
+    - cron: "31 4 * * *"
+  workflow_dispatch: {}
+permissions:
+  contents: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Sync from upstream
+        run: |
+          git config user.name sync-bot
+          git config user.email angzhiLiang@users.noreply.github.com
+          git remote add upstream https://github.com/alchaincyf/darwin-skill.git
+          git fetch upstream master
+          rm -rf skills/darwin-skill
+          mkdir -p skills/darwin-skill
+          git ls-tree -r --name-only upstream/master | while read f; do
+            mkdir -p "skills/darwin-skill/$(dirname "$f")"
+            git show "upstream/master:$f" > "skills/darwin-skill/$f"
+          done
+          git add -A
+          git diff --cached --quiet || { git commit -m "sync upstream $(git rev-parse --short upstream/master)"; git push; }
